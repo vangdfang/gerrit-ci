@@ -1,8 +1,8 @@
 #!/bin/sh
 
-if [ -e ~/gerrit-ci-scripts ]; then
+if [ -e ~/gerrit-ci-scripts ] && [ ! -e ~/gerrit-ci-scripts/TESTING ]; then
     cd ~/gerrit-ci-scripts && git pull --rebase
-else
+elif [ ! -e ~/gerrit-ci-scripts/TESTING ]; then
     git clone https://gerrit.googlesource.com/gerrit-ci-scripts ~/gerrit-ci-scripts
 fi
 

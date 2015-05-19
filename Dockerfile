@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     ant \
     default-jdk \
     golang \
+    autoconf \
+    automake \
     && rm -rf /var/lib/apt/lists/* \
     && go get "github.com/robfig/cron"
 
@@ -24,6 +26,13 @@ RUN git clone https://github.com/facebook/buck /opt/buck && \
     ln -s `pwd`/bin/buck /usr/bin/ && \
     ln -s `pwd`/bin/buckd /usr/bin/ && \
     chown -R jenkins:jenkins /opt/buck
+
+RUN git clone https://github.com/facebook/watchman.git /opt/watchman && \
+    cd /opt/watchman && \
+    ./autogen.sh && \
+    ./configure && \
+    make && \
+    make install
 
 RUN mkdir -p /etc/jenkins_jobs
 COPY jenkins_jobs.ini /etc/jenkins_jobs/jenkins_jobs.ini
@@ -40,5 +49,6 @@ ENTRYPOINT /usr/local/bin/startup.sh
 
 COPY plugins.txt /usr/share/jenkins/ref/
 RUN plugins.sh /usr/share/jenkins/ref/plugins.txt
+COPY number-executors.groovy /usr/share/jenkins/ref/init.groovy.d/
 
 COPY gitconfig /usr/share/jenkins/ref/.gitconfig
