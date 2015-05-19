@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     golang \
     autoconf \
     automake \
+    maven \
     && rm -rf /var/lib/apt/lists/* \
     && go get "github.com/robfig/cron"
 
